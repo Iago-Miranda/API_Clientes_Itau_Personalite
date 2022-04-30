@@ -30,6 +30,21 @@ namespace Dominio.Servicos
             _IConfiguration = IConfiguration;
         }
 
+        public async Task<ClienteDto> BuscarClientePorId(int id, string authToken)
+        {
+            var cliente = await _ICliente.BuscarPorId(id);
+
+            if (cliente is null)
+                return new ClienteDto();
+
+            var gerente = await BuscaUsuarioNaApi(cliente.GerenteId, authToken);
+
+            if (gerente is null)
+                return new ClienteDto();
+
+            return Mapeadores.MapeiaClienteEGerenteparaDto(gerente, cliente);
+        }
+
         public async Task<List<ClienteDto>> BuscarClientesPorGerenteId(string gerenteId, string authToken)
         {
             var gerente = await BuscaUsuarioNaApi(gerenteId, authToken);

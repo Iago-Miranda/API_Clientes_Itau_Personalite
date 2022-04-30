@@ -11,6 +11,8 @@ namespace Dominio.Interfaces.Genericos
 
         public Task Editar(T Objeto);
 
+        public Task<T> BuscarPorId(int id);
+
         public Task<List<T>> ListarTodos();
     }
 }

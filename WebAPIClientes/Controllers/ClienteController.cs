@@ -1,4 +1,6 @@
 ﻿using Aplicacao.Interfaces;
+using Aplicacao.Models;
+using Entidades.Entidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
@@ -67,6 +69,37 @@ namespace WebAPIClientes.Controllers
                 var clientes = await _AplicacaoCliente.BuscarClientesPorGerenteId(gerenteId, authToken);
 
                 return Ok(clientes);
+            }
+        }
+
+        [Produces("application/json")]
+        [HttpPost]
+        public async Task<IActionResult> AdicionarNovoCliente([FromBody] Cliente cliente)
+        {
+            var cabecalhos = Request.Headers;
+
+            var authToken = StringValues.Empty;
+
+            if (cabecalhos.ContainsKey("Authorization"))
+            {
+                cabecalhos.TryGetValue("Authorization", out authToken);
+            }
+
+            if (authToken == StringValues.Empty)
+            {
+                return Unauthorized();
+            }
+            else
+            {
+                var clienteAdicionado = await _AplicacaoCliente.Adicionar(cliente,authToken);
+
+                if (clienteAdicionado.GetType() != typeof(ClienteUi))
+                    return BadRequest(clienteAdicionado);
+
+                if (clienteAdicionado.Id == 0)
+                    return BadRequest(clienteAdicionado);
+
+                return Ok(clienteAdicionado);
             }
         }
     }

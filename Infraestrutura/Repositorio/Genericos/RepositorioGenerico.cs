@@ -29,7 +29,12 @@ namespace Infraestrutura.Repositorio.Genericos
         {
             _banco.Set<T>().Update(Objeto);
             await _banco.SaveChangesAsync();
-        }          
+        }
+
+        public async Task<T> BuscarPorId(int id)
+        {
+            return await _banco.Set<T>().FindAsync(id);
+        }
 
         public async Task<List<T>> ListarTodos()
         {
@@ -64,8 +69,6 @@ namespace Infraestrutura.Repositorio.Genericos
 
             disposed = true;
         }
-
-        
         #endregion
     }
 }
