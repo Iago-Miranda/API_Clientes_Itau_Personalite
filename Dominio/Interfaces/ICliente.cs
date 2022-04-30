@@ -10,5 +10,6 @@ namespace Dominio.Interfaces
 {
     public interface ICliente : IGenericos<Cliente>
     {
+        public Task<List<Cliente>> RetornaListaClientes(Expression<Func<Cliente, bool>> exCliente);
     }
 }

@@ -42,8 +42,9 @@ namespace WebAPIClientes
                     options.UseSqlServer(Configuration.GetConnectionString("DB_Clientes_Personalite"));
             });
 
-            services.AddControllers();
             services.AddHttpClient();
+
+            services.AddSingleton(Configuration);
 
             //Adicao dos Singletons com Interfaces e Repositorios
             services.AddTransient(typeof(IGenericos<>), typeof(RepositorioGenerico<>));

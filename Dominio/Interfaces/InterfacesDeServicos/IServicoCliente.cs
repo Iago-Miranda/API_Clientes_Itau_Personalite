@@ -9,7 +9,9 @@ namespace Dominio.Interfaces.InterfacesDeServicos
 {
     public interface IServicoCliente
     {
-        public Task<List<ClienteDto>> ListarTodosClientes();
-        public Task<List<ClienteDto>> BuscarClientesPorGerenteId(string gerenteId);
+        public Task<List<ClienteDto>> ListarTodosClientes(string authToken);
+        public Task<List<ClienteDto>> BuscarClientesPorGerenteId(string gerenteId, string authToken);
+
+        public Task<bool> GerenteExiste(string gerenteId, string authToken);
     }
 }
