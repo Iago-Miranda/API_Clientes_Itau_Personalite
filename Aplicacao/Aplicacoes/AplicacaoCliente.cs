@@ -25,7 +25,7 @@ namespace Aplicacao.Aplicacoes
 
         public async Task<List<ClienteUi>> BuscarClientesPorGerenteId(string gerenteId)
         {
-            var teste = await _IServicoCliente.BuscarClientesPorGerenteId("150A29CA-BAB6-42B4-0DCB-08DA2A3E1BA7","teste");
+            var teste = await _IServicoCliente.ListarTodosClientes("teste");
 
             throw new NotImplementedException();
         }

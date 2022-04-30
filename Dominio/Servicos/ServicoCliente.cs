@@ -39,33 +39,25 @@ namespace Dominio.Servicos
 
             var listaClientes = await _ICliente.RetornaListaClientes(cliente => cliente.GerenteId == gerenteId);
 
-            var mappingConfig = new MapperConfiguration(cfg => {
-                cfg.CreateMap<Cliente, ClienteDto>()
-                .ForMember(d => d.Gerente, opt => opt.Ignore());
-                cfg.CreateMap<Endereco, EnderecoDto>();
-                cfg.CreateMap<GerenteDto, ClienteDto>()
-                .ForMember(d => d.Gerente, opt => opt.MapFrom(s => s))
-                .ForMember(d => d.Id, opt => opt.Ignore())
-                .ForMember(d => d.Nome, opt => opt.Ignore())
-                .ForMember(d => d.Endereco, opt => opt.Ignore())
-                .ForMember(d => d.LimiteCredito, opt => opt.Ignore());
-            });
-            mappingConfig.AssertConfigurationIsValid();
-
-            var mapper = new Mapper(mappingConfig);
-
-            var clienteDtoMapeado = mapper.Map<Cliente,ClienteDto>(listaClientes[0]);
-
-            var teste = mapper.Map(gerente, clienteDtoMapeado);
-
-            return new List<ClienteDto>();
-        }        
+            return Mapeadores.MapeiaClientesMesmoGerenteparaDto(gerente, listaClientes);
+        }
 
         public async Task<List<ClienteDto>> ListarTodosClientes(string authToken)
         {
             var gerentes = await BuscaUsuariosNaApi(authToken);
 
-            throw new NotImplementedException();
+            var listaClientes = await _ICliente.ListarTodos();
+
+            var listaClientesDto = new List<ClienteDto>();
+
+            foreach (var cliente in listaClientes)
+            {
+                var gerenteResponsavel = gerentes.FirstOrDefault(gerente => gerente.Id.ToUpper() == cliente.GerenteId.ToUpper());
+
+                listaClientesDto.Add(Mapeadores.MapeiaClienteEGerenteparaDto(gerenteResponsavel, cliente));
+            }
+
+            return listaClientesDto;
         }
 
         public async Task<bool> GerenteExiste(string gerenteId, string authToken)
