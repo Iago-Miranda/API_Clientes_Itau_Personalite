@@ -8,9 +8,9 @@ namespace Aplicacao.Interfaces
 {
     public interface IAplicacaoCliente
     {
-        public Task<dynamic> Adicionar(Cliente cliente, string authToken);
+        public Task<ClienteUi> Adicionar(Cliente cliente, string authToken);
 
-        public Task<dynamic> Editar(Cliente cliente, string authToken);
+        public Task<ClienteUi> Editar(Cliente cliente, string authToken);
 
         public Task<List<ClienteUi>> ListarTodosClientes(string authToken);
 

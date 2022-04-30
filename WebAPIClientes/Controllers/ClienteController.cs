@@ -1,6 +1,8 @@
 ﻿using Aplicacao.Interfaces;
 using Aplicacao.Models;
+using Aplicacao.Validadores;
 using Entidades.Entidades;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
@@ -12,6 +14,7 @@ using System.Threading.Tasks;
 namespace WebAPIClientes.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class ClienteController : ControllerBase
     {
@@ -76,6 +79,18 @@ namespace WebAPIClientes.Controllers
         [HttpPost]
         public async Task<IActionResult> AdicionarNovoCliente([FromBody] Cliente cliente)
         {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            ValidadorCliente validador = new ValidadorCliente();
+
+            var resultadoValidacao = validador.Validate(cliente);
+
+            if (!resultadoValidacao.IsValid || cliente.Id != 0)
+            {
+                return BadRequest(resultadoValidacao.Errors);
+            }
+
             var cabecalhos = Request.Headers;
 
             var authToken = StringValues.Empty;
@@ -93,13 +108,47 @@ namespace WebAPIClientes.Controllers
             {
                 var clienteAdicionado = await _AplicacaoCliente.Adicionar(cliente,authToken);
 
-                if (clienteAdicionado.GetType() != typeof(ClienteUi))
-                    return BadRequest(clienteAdicionado);
-
                 if (clienteAdicionado.Id == 0)
-                    return BadRequest(clienteAdicionado);
+                    return BadRequest();
 
                 return Ok(clienteAdicionado);
+            }
+        }
+
+        [Produces("application/json")]
+        [HttpPut]
+        public async Task<IActionResult> EditarCliente([FromBody] Cliente cliente)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            ValidadorCliente validador = new ValidadorCliente();
+
+            var resultadoValidacao = validador.Validate(cliente);
+
+            if (!resultadoValidacao.IsValid)
+            {
+                return BadRequest(resultadoValidacao.Errors);
+            }
+
+            var cabecalhos = Request.Headers;
+
+            var authToken = StringValues.Empty;
+
+            if (cabecalhos.ContainsKey("Authorization"))
+            {
+                cabecalhos.TryGetValue("Authorization", out authToken);
+            }
+
+            if (authToken == StringValues.Empty)
+            {
+                return Unauthorized();
+            }
+            else
+            {
+                var clienteEditado = await _AplicacaoCliente.Editar(cliente, authToken);
+
+                return Ok(clienteEditado);
             }
         }
     }

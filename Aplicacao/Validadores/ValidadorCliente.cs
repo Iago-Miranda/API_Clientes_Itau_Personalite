@@ -43,7 +43,7 @@ namespace Aplicacao.Validadores
 
             RuleFor(cliente => cliente.Endereco.CEP)
                 .NotNull().WithMessage("O CEP no endereço é obrigatório!")
-                .Matches(@"^\d{5}(?:[-\s]\d{3})?$");
+                .Matches(@"^\d{5}(?:[-\s]\d{3})?$").WithMessage("O formato do CEP está incorreto, siga o padrão: '00000-000'.");
         }
     }
 }

@@ -9,12 +9,14 @@ namespace Dominio.Interfaces.InterfacesDeServicos
 {
     public interface IServicoCliente
     {
+        public Task<bool> Adicionar(Cliente cliente, string authToken);
+
+        public Task<bool> Editar(Cliente cliente, string authToken);
+
         public Task<List<ClienteDto>> ListarTodosClientes(string authToken);
 
         public Task<ClienteDto> BuscarClientePorId(int id, string authToken);
 
         public Task<List<ClienteDto>> BuscarClientesPorGerenteId(string gerenteId, string authToken);
-
-        public Task<bool> GerenteExiste(string gerenteId, string authToken);
     }
 }

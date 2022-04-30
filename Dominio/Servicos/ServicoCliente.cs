@@ -30,6 +30,29 @@ namespace Dominio.Servicos
             _IConfiguration = IConfiguration;
         }
 
+        public async Task<bool> Adicionar(Cliente cliente, string authToken)
+        {
+            if (!(await GerenteExiste(cliente.GerenteId, authToken)))
+                return false;
+
+            await _ICliente.Adicionar(cliente);
+
+            if (cliente.Id == 0)
+                return false;
+
+            return true;
+        }
+
+        public async Task<bool> Editar(Cliente cliente, string authToken)
+        {
+            if (!(await GerenteExiste(cliente.GerenteId, authToken)))
+                return false;
+
+            await _ICliente.Editar(cliente);
+
+            return true;
+        }
+
         public async Task<ClienteDto> BuscarClientePorId(int id, string authToken)
         {
             var cliente = await _ICliente.BuscarPorId(id);
@@ -76,7 +99,7 @@ namespace Dominio.Servicos
             return listaClientesDto;
         }
 
-        public async Task<bool> GerenteExiste(string gerenteId, string authToken)
+        private async Task<bool> GerenteExiste(string gerenteId, string authToken)
         {
             return await BuscaUsuarioNaApi(gerenteId, authToken) != null;
         }
@@ -151,6 +174,6 @@ namespace Dominio.Servicos
             {
                 return null;
             }
-        }
+        }        
     }
 }
