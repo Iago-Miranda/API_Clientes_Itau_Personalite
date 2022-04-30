@@ -1,6 +1,8 @@
 ﻿using Aplicacao.Interfaces;
 using Aplicacao.Models;
+using AutoMapper;
 using Dominio.Interfaces.InterfacesDeServicos;
+using Dominio.Models;
 using Entidades.Entidades;
 using System;
 using System.Collections.Generic;
@@ -23,13 +25,6 @@ namespace Aplicacao.Aplicacoes
             throw new NotImplementedException();
         }
 
-        public async Task<List<ClienteUi>> BuscarClientesPorGerenteId(string gerenteId)
-        {
-            var teste = await _IServicoCliente.ListarTodosClientes("teste");
-
-            throw new NotImplementedException();
-        }
-
         public Task Editar(Cliente Objeto)
         {
             throw new NotImplementedException();
@@ -40,9 +35,23 @@ namespace Aplicacao.Aplicacoes
             throw new NotImplementedException();
         }
 
-        public Task<List<ClienteUi>> ListarTodosClientes()
+        public async Task<List<ClienteUi>> ListarTodosClientes(string authToken)
         {
-            throw new NotImplementedException();
+            var clientesDto = await _IServicoCliente.ListarTodosClientes(authToken);
+
+            Mapper mapper = Mapeadores.ObterMapeadorClienteDtoClienteUi();
+
+            return mapper.Map<List<ClienteUi>>(clientesDto);
         }
+
+        public async Task<List<ClienteUi>> BuscarClientesPorGerenteId(string gerenteId, string authToken)
+        {
+            var clientesDto = await _IServicoCliente.BuscarClientesPorGerenteId(gerenteId,authToken);
+
+            Mapper mapper = Mapeadores.ObterMapeadorClienteDtoClienteUi();
+
+            return mapper.Map<List<ClienteUi>>(clientesDto);
+        }
+
     }
 }

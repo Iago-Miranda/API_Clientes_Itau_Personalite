@@ -9,7 +9,7 @@ namespace Dominio
 {
     public static class Mapeadores
     {
-        private static Mapper ObterMapeadorClienteClienteDto()
+        public static Mapper ObterMapeadorClienteClienteDto()
         {
             var mappingConfig = new MapperConfiguration(cfg =>
             {

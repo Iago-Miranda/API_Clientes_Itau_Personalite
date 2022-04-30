@@ -10,7 +10,5 @@ namespace Aplicacao.Interfaces.Genericos
         public Task Adicionar(T Objeto);
 
         public Task Editar(T Objeto);
-
-        public Task<List<T>> ListarTodos();
     }
 }

@@ -9,7 +9,7 @@ namespace Aplicacao.Interfaces
 {
     public interface IAplicacaoCliente: IAplicacaoGenerica<Cliente>
     {
-        public Task<List<ClienteUi>> ListarTodosClientes();
-        public Task<List<ClienteUi>> BuscarClientesPorGerenteId(string gerenteId);
+        public Task<List<ClienteUi>> ListarTodosClientes(string authToken);
+        public Task<List<ClienteUi>> BuscarClientesPorGerenteId(string gerenteId, string authToken);
     }
 }
