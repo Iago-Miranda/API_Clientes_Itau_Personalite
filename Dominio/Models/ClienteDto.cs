@@ -4,14 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Aplicacao.Models
+namespace Dominio.Models
 {
-    public class ClienteUi
+    public class ClienteDto
     {
         public int Id { get; set; }
-        public GerenteUi Gerente { get; set; }
+        public GerenteDto Gerente { get; set; }
 
-        public EnderecoUi Endereco { get; set; }
+        public EnderecoDto Endereco { get; set; }
 
         public string Nome { get; set; }
 
