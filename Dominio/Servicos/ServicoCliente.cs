@@ -54,7 +54,8 @@ namespace Dominio.Servicos
             {
                 var gerenteResponsavel = gerentes.FirstOrDefault(gerente => gerente.Id.ToUpper() == cliente.GerenteId.ToUpper());
 
-                listaClientesDto.Add(Mapeadores.MapeiaClienteEGerenteparaDto(gerenteResponsavel, cliente));
+                if(!(gerenteResponsavel is null))
+                    listaClientesDto.Add(Mapeadores.MapeiaClienteEGerenteparaDto(gerenteResponsavel, cliente));
             }
 
             return listaClientesDto;
@@ -77,7 +78,7 @@ namespace Dominio.Servicos
                 Headers =
             {
                 { HeaderNames.Accept, "application/json" },
-                { HeaderNames.Authorization, $@"Bearer {authToken}" }
+                { HeaderNames.Authorization, authToken }
             }
             };
 
@@ -113,7 +114,7 @@ namespace Dominio.Servicos
                 Headers =
             {
                 { HeaderNames.Accept, "application/json" },
-                { HeaderNames.Authorization, $@"Bearer {authToken}" }
+                { HeaderNames.Authorization, authToken }
             }
             };
 
