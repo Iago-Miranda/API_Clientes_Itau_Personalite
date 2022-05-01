@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Dominio.Models;
 using Entidades.Entidades;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Dominio
 {

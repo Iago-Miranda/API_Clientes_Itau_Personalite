@@ -1,14 +1,10 @@
 ﻿using Aplicacao.Interfaces;
 using Aplicacao.Models;
-using Aplicacao.Validadores;
 using AutoMapper;
 using Dominio.Interfaces;
 using Dominio.Interfaces.InterfacesDeServicos;
-using Dominio.Models;
 using Entidades.Entidades;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Aplicacao.Aplicacoes
@@ -24,9 +20,9 @@ namespace Aplicacao.Aplicacoes
 
         public async Task<ClienteUi> Adicionar(Cliente cliente, string authToken)
         {          
-            await _IServicoCliente.Adicionar(cliente, authToken);
+            var sucesso = await _IServicoCliente.Adicionar(cliente, authToken);
 
-            if (cliente.Id == 0)
+            if (!sucesso)
                 return new ClienteUi();
 
             return await BuscarClientePorId(cliente.Id, authToken);
@@ -34,7 +30,10 @@ namespace Aplicacao.Aplicacoes
 
         public async Task<ClienteUi> Editar(Cliente cliente, string authToken)
         {
-            await _IServicoCliente.Editar(cliente, authToken);
+            var sucesso = await _IServicoCliente.Editar(cliente, authToken);
+
+            if (!sucesso)
+                return new ClienteUi();
 
             return await BuscarClientePorId(cliente.Id, authToken);
         }

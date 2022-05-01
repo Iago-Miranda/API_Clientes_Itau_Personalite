@@ -1,9 +1,6 @@
 ﻿using Aplicacao.Models;
 using AutoMapper;
 using Dominio.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Aplicacao
 {

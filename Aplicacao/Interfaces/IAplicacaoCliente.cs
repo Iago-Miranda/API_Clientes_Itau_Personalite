@@ -1,6 +1,5 @@
 ﻿using Aplicacao.Models;
 using Entidades.Entidades;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
