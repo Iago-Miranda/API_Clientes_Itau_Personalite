@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Aplicacao.Models
+﻿namespace Aplicacao.Models
 {
     public class EnderecoUi
     {

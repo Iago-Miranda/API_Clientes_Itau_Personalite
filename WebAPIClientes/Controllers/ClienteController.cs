@@ -1,14 +1,9 @@
 ﻿using Aplicacao.Interfaces;
-using Aplicacao.Models;
-using Aplicacao.Validadores;
 using Entidades.Entidades;
+using Entidades.Validadores;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace WebAPIClientes.Controllers
@@ -147,6 +142,9 @@ namespace WebAPIClientes.Controllers
             else
             {
                 var clienteEditado = await _AplicacaoCliente.Editar(cliente, authToken);
+
+                if (clienteEditado.Id == 0)
+                    return BadRequest();
 
                 return Ok(clienteEditado);
             }

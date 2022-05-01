@@ -1,17 +1,13 @@
-﻿using AutoMapper;
-using Dominio.Interfaces;
+﻿using Dominio.Interfaces;
 using Dominio.Interfaces.InterfacesDeServicos;
 using Dominio.Models;
 using Entidades.Entidades;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Net.Http.Headers;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -108,9 +104,11 @@ namespace Dominio.Servicos
         {
             var enderecoApiUsuarios = _IConfiguration.GetSection("DominioConfig:EnderecoApiUsuarios").Value;
 
+            var endpointApiUsuarios = _IConfiguration.GetSection("DominioConfig:EndpointApiUsuarios").Value;
+
             var httpRequestMessage = new HttpRequestMessage(
                 HttpMethod.Get,
-                $@"{enderecoApiUsuarios}/Usuario/{gerenteId}"
+                $@"{enderecoApiUsuarios}/{endpointApiUsuarios}/{gerenteId}"
                 )
             {
                 Headers =
@@ -144,9 +142,11 @@ namespace Dominio.Servicos
         {
             var enderecoApiUsuarios = _IConfiguration.GetSection("DominioConfig:EnderecoApiUsuarios").Value;
 
+            var endpointApiUsuarios = _IConfiguration.GetSection("DominioConfig:EndpointApiUsuarios").Value;
+
             var httpRequestMessage = new HttpRequestMessage(
                 HttpMethod.Get,
-                $@"{enderecoApiUsuarios}/Usuario"
+                $@"{enderecoApiUsuarios}/{endpointApiUsuarios}"
                 )
             {
                 Headers =
