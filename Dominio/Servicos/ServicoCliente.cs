@@ -16,13 +16,13 @@ namespace Dominio.Servicos
     public class ServicoCliente : IServicoCliente
     {
         private readonly ICliente _ICliente;
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IServicoHttp _IServicoHttp;
         private readonly IConfiguration _IConfiguration;
 
-        public ServicoCliente(ICliente ICliente, IHttpClientFactory httpClientFactory, IConfiguration IConfiguration)
+        public ServicoCliente(ICliente ICliente, IServicoHttp IServicoHttp, IConfiguration IConfiguration)
         {
             _ICliente = ICliente;
-            _httpClientFactory = httpClientFactory;
+            _IServicoHttp = IServicoHttp;
             _IConfiguration = IConfiguration;
         }
 
@@ -106,36 +106,7 @@ namespace Dominio.Servicos
 
             var endpointApiUsuarios = _IConfiguration.GetSection("DominioConfig:EndpointApiUsuarios").Value;
 
-            var httpRequestMessage = new HttpRequestMessage(
-                HttpMethod.Get,
-                $@"{enderecoApiUsuarios}/{endpointApiUsuarios}/{gerenteId}"
-                )
-            {
-                Headers =
-            {
-                { HeaderNames.Accept, "application/json" },
-                { HeaderNames.Authorization, authToken }
-            }
-            };
-
-            var httpClient = _httpClientFactory.CreateClient();
-            var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
-
-            if (httpResponseMessage.StatusCode == HttpStatusCode.OK)
-            {
-                var conteudo =  await httpResponseMessage.Content.ReadAsStreamAsync();
-
-                var opcoesDesserializacao = new JsonSerializerOptions();
-                opcoesDesserializacao.PropertyNameCaseInsensitive = true;
-                GerenteDto gerenteDto = await JsonSerializer.DeserializeAsync
-                                                            <GerenteDto>(conteudo, opcoesDesserializacao);
-
-                return gerenteDto;
-            }
-            else
-            {
-                return null;
-            }
+            return await _IServicoHttp.BuscaUsuarioNaApi(gerenteId, authToken, enderecoApiUsuarios, endpointApiUsuarios);
         }
 
         private async Task<IEnumerable<GerenteDto>> BuscaUsuariosNaApi(string authToken)
@@ -144,36 +115,7 @@ namespace Dominio.Servicos
 
             var endpointApiUsuarios = _IConfiguration.GetSection("DominioConfig:EndpointApiUsuarios").Value;
 
-            var httpRequestMessage = new HttpRequestMessage(
-                HttpMethod.Get,
-                $@"{enderecoApiUsuarios}/{endpointApiUsuarios}"
-                )
-            {
-                Headers =
-            {
-                { HeaderNames.Accept, "application/json" },
-                { HeaderNames.Authorization, authToken }
-            }
-            };
-
-            var httpClient = _httpClientFactory.CreateClient();
-            var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
-
-            if (httpResponseMessage.StatusCode == HttpStatusCode.OK)
-            {
-                var conteudo = await httpResponseMessage.Content.ReadAsStreamAsync();
-
-                var opcoesDesserializacao = new JsonSerializerOptions();
-                opcoesDesserializacao.PropertyNameCaseInsensitive = true;
-                IEnumerable<GerenteDto> gerentesDto = await JsonSerializer.DeserializeAsync
-                                                            <IEnumerable<GerenteDto>>(conteudo, opcoesDesserializacao);
-
-                return gerentesDto;
-            }
-            else
-            {
-                return null;
-            }
+            return await _IServicoHttp.BuscaUsuariosNaApi(authToken, enderecoApiUsuarios, endpointApiUsuarios);
         }        
     }
 }

@@ -50,8 +50,9 @@ namespace WebAPIClientes
 
             //Adicao dos Singletons com Interfaces e Servicos
             services.AddTransient<IServicoCliente, ServicoCliente>();
+            services.AddTransient<IServicoHttp, ServicoHttp>();
 
-            //Adicao dos Singletons com Interfaces e Servicos
+            //Adicao dos Singletons com Interfaces e Aplicacoes
             services.AddTransient<IAplicacaoCliente, AplicacaoCliente>();
 
             services.AddControllers();
